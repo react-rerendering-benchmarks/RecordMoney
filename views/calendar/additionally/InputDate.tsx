@@ -1,7 +1,7 @@
+import { memo } from "react";
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { KeyboardTypeOptions } from 'react-native';
 import styled from 'styled-components/native';
-
 const BoxView = styled.View`
     display: flex;
     flex-direction: row;
@@ -10,7 +10,6 @@ const BoxView = styled.View`
     max-width: 100%;
     
 `;
-
 const TextName = styled.Text`
     font-family: 'MainFont-Regular';
     text-align: center;
@@ -20,48 +19,40 @@ const TextName = styled.Text`
     align-self: flex-end;
     font-size: 15px;
 `;
-
 const InputText = styled.TextInput`
     text-align: left;
     align-self: flex-end;
     width: 100%;
     
 `;
-
 const BoxInput = styled.View`
     padding-left: 19px
     width: 66%;
 `;
-
-const InputDate = (props: {functionDate: Function, textName: string, value: string, placeholder: string, keyboardType: KeyboardTypeOptions, colorActiveInput: string, setValue: Dispatch<SetStateAction<string>>}) => {
+const InputDate = memo((props: {
+  functionDate: Function;
+  textName: string;
+  value: string;
+  placeholder: string;
+  keyboardType: KeyboardTypeOptions;
+  colorActiveInput: string;
+  setValue: Dispatch<SetStateAction<string>>;
+}) => {
   const [active, setActive] = useState(false);
-
-  return (
-      <BoxView>
+  return <BoxView>
         <TextName>{props.textName}</TextName>
-        <BoxInput
-          style={
-            !active
-              ? {
-                  borderBottomColor: '#C6C3C3',
-                  borderBottomWidth: 1
-                }
-              : {
-                  borderBottomColor: props.colorActiveInput,
-                  borderBottomWidth: 1
-                }
-          }>
-          <InputText
-            onChangeText={props.setValue}
-            value={props.value}
-            placeholder={props.placeholder}
-            keyboardType={props.keyboardType}
-            onFocus={() => {setActive(true); props.functionDate()}}
-            onEndEditing={() => setActive(false)}
-          />
+        <BoxInput style={!active ? {
+      borderBottomColor: '#C6C3C3',
+      borderBottomWidth: 1
+    } : {
+      borderBottomColor: props.colorActiveInput,
+      borderBottomWidth: 1
+    }}>
+          <InputText onChangeText={props.setValue} value={props.value} placeholder={props.placeholder} keyboardType={props.keyboardType} onFocus={() => {
+        setActive(true);
+        props.functionDate();
+      }} onEndEditing={() => setActive(false)} />
         </BoxInput>
-      </BoxView>
-  );
-};
-
+      </BoxView>;
+});
 export default InputDate;

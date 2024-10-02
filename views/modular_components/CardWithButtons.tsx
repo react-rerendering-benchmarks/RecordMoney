@@ -1,6 +1,6 @@
+import { memo } from "react";
 import { TouchableOpacity, View } from 'react-native';
 import styled from 'styled-components/native';
-
 const Card = styled.View`
     display: flex;
     flex-direction: row;
@@ -29,15 +29,13 @@ const Card = styled.View`
  * </CardWithButtons>
  * ```
  */
-export default function CardWithButtons(props: { children: React.ReactNode; func?: Function }) {
-    return (
-        <TouchableOpacity
-            onLongPress={() => {
-                props.func && props.func();
-            }}
-            delayLongPress={300}
-        >
+export default memo(function CardWithButtons(props: {
+  children: React.ReactNode;
+  func?: Function;
+}) {
+  return <TouchableOpacity onLongPress={() => {
+    props.func && props.func();
+  }} delayLongPress={300}>
             <Card>{props.children}</Card>
-        </TouchableOpacity>
-    );
-}
+        </TouchableOpacity>;
+});

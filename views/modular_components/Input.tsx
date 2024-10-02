@@ -1,7 +1,7 @@
+import { memo } from "react";
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { KeyboardTypeOptions } from 'react-native';
 import styled from 'styled-components/native';
-
 const BoxView = styled.View`
     display: flex;
     flex-direction: row;
@@ -9,7 +9,6 @@ const BoxView = styled.View`
     margin: 0 15px 30px;
     max-width: 100%;
 `;
-
 const TextName = styled.Text`
     font-family: 'MainFont-Regular';
     text-align: center;
@@ -19,13 +18,11 @@ const TextName = styled.Text`
     align-self: flex-end;
     font-size: 14px;
 `;
-
 const InputText = styled.TextInput`
     text-align: left;
     align-self: flex-end;
     width: 100%;
 `;
-
 const BoxInput = styled.View`
     padding-left: 19px
     width: 66%;
@@ -45,54 +42,35 @@ const BoxInput = styled.View`
  *              }
  *
  */
-const Input = (props: {
-    len?: number;
-    textName: string;
-    value: string;
-    index: number;
-    placeholder: string;
-    keyboardType: KeyboardTypeOptions;
-    colorActiveInput: string;
-    setItems: Dispatch<SetStateAction<string[]>>;
+const Input = memo((props: {
+  len?: number;
+  textName: string;
+  value: string;
+  index: number;
+  placeholder: string;
+  keyboardType: KeyboardTypeOptions;
+  colorActiveInput: string;
+  setItems: Dispatch<SetStateAction<string[]>>;
 }) => {
-    const [active, setActive] = useState(false);
-
-    const setValue = (newValue: string) => {
-        props.setItems((prevItems) => {
-            const newItems = [...prevItems];
-            newItems[props.index] = newValue;
-            return newItems;
-        });
-    };
-
-    return (
-        <BoxView>
+  const [active, setActive] = useState(false);
+  const setValue = (newValue: string) => {
+    props.setItems(prevItems => {
+      const newItems = [...prevItems];
+      newItems[props.index] = newValue;
+      return newItems;
+    });
+  };
+  return <BoxView>
             <TextName>{props.textName}</TextName>
-            <BoxInput
-                style={
-                    !active
-                        ? {
-                              borderBottomColor: '#C6C3C3',
-                              borderBottomWidth: 1,
-                          }
-                        : {
-                              borderBottomColor: props.colorActiveInput,
-                              borderBottomWidth: 1,
-                          }
-                }
-            >
-                <InputText
-                    onChangeText={setValue}
-                    value={props.value}
-                    placeholder={props.placeholder}
-                    keyboardType={props.keyboardType}
-                    onFocus={() => setActive(true)}
-                    onEndEditing={() => setActive(false)}
-                    maxLength={props.keyboardType == 'numeric' ? 10 : props.len || 20}
-                />
+            <BoxInput style={!active ? {
+      borderBottomColor: '#C6C3C3',
+      borderBottomWidth: 1
+    } : {
+      borderBottomColor: props.colorActiveInput,
+      borderBottomWidth: 1
+    }}>
+                <InputText onChangeText={setValue} value={props.value} placeholder={props.placeholder} keyboardType={props.keyboardType} onFocus={() => setActive(true)} onEndEditing={() => setActive(false)} maxLength={props.keyboardType == 'numeric' ? 10 : props.len || 20} />
             </BoxInput>
-        </BoxView>
-    );
-};
-
+        </BoxView>;
+});
 export default Input;
