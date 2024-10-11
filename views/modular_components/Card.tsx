@@ -1,6 +1,6 @@
+import { memo } from "react";
 import { TouchableOpacity } from 'react-native';
-import styled from 'styled-components/native'
-
+import styled from 'styled-components/native';
 const CardView = styled.View`
     display: flex;
     flex-direction: row;
@@ -13,13 +13,15 @@ const CardView = styled.View`
     padding: 10px;
     border-radius: 10px;
 `;
-
-export default function Card (props: {onPress?: Function, children: React.ReactNode}) {
-  return (
-    <TouchableOpacity onPress={()=>{props.onPress && props.onPress()}}>
+export default function Card(props: {
+  onPress?: Function;
+  children: React.ReactNode;
+}) {
+  return <TouchableOpacity onPress={() => {
+    props.onPress && props.onPress();
+  }}>
       <CardView>
         {props.children}
       </CardView>
-    </TouchableOpacity>
-  );
+    </TouchableOpacity>;
 }

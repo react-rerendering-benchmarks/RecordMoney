@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { StatusBar, Text, View } from 'react-native';
 import styled from 'styled-components/native';
 import PlusSvg from '../../assets/icon/plus.svg';
@@ -5,7 +6,6 @@ import BurgerSvg from '../../assets/icon/Burger.svg';
 import ArrowSvg from '../../assets/icon/Arrow.svg';
 import { useState } from 'react';
 import MenuModal from './MenuModal';
-
 const ViewHeader = styled.View`
     margin: 40px 35px 0;
     max-width: 100%;
@@ -15,12 +15,10 @@ const ViewHeader = styled.View`
     justify-content: space-between;
     align-items: center;
 `;
-
 const TextHeader = styled.Text`
     font-family: 'MainFont-Bold';
     font-size: 20px;
 `;
-
 const ButtonHeader = styled.TouchableOpacity`
     display: flex;
     justify-content: center;
@@ -40,49 +38,31 @@ const ButtonHeader = styled.TouchableOpacity`
  * ```
  */
 
-export default function Header(props: {
-    name: string;
-    style: string;
-    functionLeft: Function;
-    functionRight: Function;
-    onModalHide?: Function;
+export default memo(function Header(props: {
+  name: string;
+  style: string;
+  functionLeft: Function;
+  functionRight: Function;
+  onModalHide?: Function;
 }) {
-    const [menuVisivle, setMenuVisivle] = useState(false);
-    return (
-        <View>
-            <MenuModal
-                isVisible={menuVisivle}
-                setVisible={setMenuVisivle}
-                onModalHide={props.onModalHide}
-            />
+  const [menuVisivle, setMenuVisivle] = useState(false);
+  return <View>
+            <MenuModal isVisible={menuVisivle} setVisible={setMenuVisivle} onModalHide={props.onModalHide} />
             <ViewHeader>
-                <BurgerSvg
-                    width={25}
-                    height={25}
-                    onPress={() => {
-                        setMenuVisivle(true);
-                    }}
-                />
+                <BurgerSvg width={25} height={25} onPress={() => {
+        setMenuVisivle(true);
+      }} />
                 <TextHeader>{props.name}</TextHeader>
-                {props.style == '1' ? (
-                    <ButtonHeader
-                        onPress={() => {
-                            props.functionRight();
-                        }}
-                        style={{ shadowColor: '#625E5E', elevation: 10 }}
-                    >
+                {props.style == '1' ? <ButtonHeader onPress={() => {
+        props.functionRight();
+      }} style={{
+        shadowColor: '#625E5E',
+        elevation: 10
+      }}>
                         <PlusSvg width={15} height={15} />
-                    </ButtonHeader>
-                ) : (
-                    <ArrowSvg
-                        width={25}
-                        height={25}
-                        onPress={() => {
-                            props.functionRight();
-                        }}
-                    />
-                )}
+                    </ButtonHeader> : <ArrowSvg width={25} height={25} onPress={() => {
+        props.functionRight();
+      }} />}
             </ViewHeader>
-        </View>
-    );
-}
+        </View>;
+});

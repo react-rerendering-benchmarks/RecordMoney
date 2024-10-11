@@ -1,10 +1,10 @@
+import { memo } from "react";
 import { useState } from 'react';
 import { View } from 'react-native';
 import Modal from 'react-native-modal';
 import styled from 'styled-components/native';
 import PlusSvg from '../../assets/icon/plus.svg';
 import Account from '../accounts/Account';
-
 const ViewHeader = styled.View`
     margin: 4px 35px 0;
     max-width: 100%;
@@ -29,62 +29,37 @@ const ButtonHeader = styled.TouchableOpacity`
     border-radius: 100px;
     border: 1px solid #aba5a5;
 `;
-
-export default function MenuModal(props: {
-    isVisible?: boolean;
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-    onModalHide?: Function;
+export default memo(function MenuModal(props: {
+  isVisible?: boolean;
+  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  onModalHide?: Function;
 }) {
-    const [accountVisible, setAccountVisible] = useState(false);
-
-    return (
-        <View>
-            <Modal
-                isVisible={props.isVisible}
-                backdropColor='#fff'
-                backdropOpacity={1}
-                backdropTransitionInTiming={0}
-                backdropTransitionOutTiming={0}
-                animationInTiming={500}
-                animationOutTiming={500}
-                animationIn='fadeInLeftBig'
-                style={{
-                    flex: 1,
-                    margin: 0,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                }}
-                animationOut='fadeOutLeftBig'
-            >
+  const [accountVisible, setAccountVisible] = useState(false);
+  return <View>
+            <Modal isVisible={props.isVisible} backdropColor='#fff' backdropOpacity={1} backdropTransitionInTiming={0} backdropTransitionOutTiming={0} animationInTiming={500} animationOutTiming={500} animationIn='fadeInLeftBig' style={{
+      flex: 1,
+      margin: 0,
+      flexDirection: 'column',
+      justifyContent: 'flex-start'
+    }} animationOut='fadeOutLeftBig'>
                 <ViewHeader>
-                    <PlusSvg
-                        width={25}
-                        height={25}
-                        rotation={45}
-                        onPress={() => {
-                            props.setVisible(false);
-                        }}
-                    />
+                    <PlusSvg width={25} height={25} rotation={45} onPress={() => {
+          props.setVisible(false);
+        }} />
                     <TextHeader>Счета</TextHeader>
-                    <ButtonHeader
-                        onPress={() => {
-                            setAccountVisible(true);
-                        }}
-                        style={{ shadowColor: '#625E5E', elevation: 10 }}
-                    >
+                    <ButtonHeader onPress={() => {
+          setAccountVisible(true);
+        }} style={{
+          shadowColor: '#625E5E',
+          elevation: 10
+        }}>
                         <PlusSvg width={15} height={15} />
                     </ButtonHeader>
                 </ViewHeader>
-                <Account
-                    visible={accountVisible}
-                    setVisible={setAccountVisible}
-                    onModalHide={props.onModalHide}
-                />
+                <Account visible={accountVisible} setVisible={setAccountVisible} onModalHide={props.onModalHide} />
             </Modal>
-        </View>
-    );
-}
-
+        </View>;
+});
 MenuModal.defaultProps = {
-    isVisible: false,
+  isVisible: false
 };

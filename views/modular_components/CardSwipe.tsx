@@ -1,9 +1,9 @@
+import { memo } from "react";
 import React, { useRef } from 'react';
 import { PanResponder, Animated, TouchableOpacity } from 'react-native';
 import styled from 'styled-components/native';
 import Trash from '../../assets/icon/Trash.svg';
 import Edit from '../../assets/icon/Edit.svg';
-
 const Vieww = styled.View`
     // display: flex;
     // flex-direction: row;
@@ -15,7 +15,6 @@ const Vieww = styled.View`
     border-radius: 10px;
     z-index: 1;
 `;
-
 const CardView = styled(Animated.View)`
     background-color: #fff;
     display: flex;
@@ -28,7 +27,6 @@ const CardView = styled(Animated.View)`
     border-radius: 10px;
     z-index: 5;
 `;
-
 const BackgroundView = styled.View`
     position: absolute;
     dispay: flex;
@@ -38,7 +36,6 @@ const BackgroundView = styled.View`
     height: 80px;
     border-radius: 10px;
 `;
-
 const DeleteView = styled.View`
     position: absolute;
     right: 0;
@@ -51,7 +48,6 @@ const DeleteView = styled.View`
     align-items: flex-end;
     padding-right: 10px;
 `;
-
 const UpdateView = styled.View`
     position: absolute;
     left: 0;
@@ -64,97 +60,106 @@ const UpdateView = styled.View`
     align-items: flex-start;
     padding-left: 10px;
 `;
-
-export default function CardSwipe(props: {
-    onDoubleClick?: Function;
-    onEdit: Function;
-    onDelete: Function;
-    children: React.ReactNode;
+export default memo(function CardSwipe(props: {
+  onDoubleClick?: Function;
+  onEdit: Function;
+  onDelete: Function;
+  children: React.ReactNode;
 }) {
-    const pan = useRef(new Animated.ValueXY()).current;
-    const DOUBLE_CLICK_DELAY = 300;
-    let lastClickTime = 0;
-    const panResponder = useRef(
-        PanResponder.create({
-            onMoveShouldSetPanResponder: () => true,
-            onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
-                useNativeDriver: false,
-            }),
-            onPanResponderRelease: (e, gesture) => {
-                const currentTime = new Date().getTime();
-                const dt = currentTime - lastClickTime;
-                if (dt < DOUBLE_CLICK_DELAY) {
-                    props.onDoubleClick && props.onDoubleClick();
-                }
-                lastClickTime = currentTime;
-                if (Math.abs(gesture.dx) < 30 && Math.abs(gesture.dy) < 30) {
-                    Animated.spring(pan, {
-                        toValue: { x: 0, y: 0 },
-                        useNativeDriver: false,
-                    }).start();
-                } else {
-                    // console.log(pan.x, " ", gesture.dx, " Стена");
-                    if (gesture.dx < 1) {
-                        Animated.timing(pan, {
-                            toValue: { x: -70, y: 0 },
-                            duration: 200,
-                            useNativeDriver: false,
-                        }).start();
-                    } else if (gesture.dx > 1) {
-                        Animated.timing(pan, {
-                            toValue: { x: 70, y: 0 },
-                            duration: 200,
-                            useNativeDriver: false,
-                        }).start();
-                    }
-                }
-                setTimeout(() => {
-                    Animated.timing(pan, {
-                        toValue: { x: 0, y: 0 },
-                        duration: 200,
-                        useNativeDriver: false,
-                    }).start();
-                }, 1000);
+  const pan = useRef(new Animated.ValueXY()).current;
+  const DOUBLE_CLICK_DELAY = 300;
+  let lastClickTime = 0;
+  const panResponder = useRef(PanResponder.create({
+    onMoveShouldSetPanResponder: () => true,
+    onPanResponderMove: Animated.event([null, {
+      dx: pan.x,
+      dy: pan.y
+    }], {
+      useNativeDriver: false
+    }),
+    onPanResponderRelease: (e, gesture) => {
+      const currentTime = new Date().getTime();
+      const dt = currentTime - lastClickTime;
+      if (dt < DOUBLE_CLICK_DELAY) {
+        props.onDoubleClick && props.onDoubleClick();
+      }
+      lastClickTime = currentTime;
+      if (Math.abs(gesture.dx) < 30 && Math.abs(gesture.dy) < 30) {
+        Animated.spring(pan, {
+          toValue: {
+            x: 0,
+            y: 0
+          },
+          useNativeDriver: false
+        }).start();
+      } else {
+        // console.log(pan.x, " ", gesture.dx, " Стена");
+        if (gesture.dx < 1) {
+          Animated.timing(pan, {
+            toValue: {
+              x: -70,
+              y: 0
             },
-        }),
-    ).current;
-
-    return (
-        <Vieww
-            style={{
-                shadowColor: '#000',
-                shadowOffset: { width: 2, height: 2 },
-                shadowOpacity: 0.25,
-                shadowRadius: 5,
-                elevation: 5,
-            }}
-        >
-            <CardView
-                style={{
-                    transform: [{ translateX: pan.x }, { translateY: 0 }],
-                }}
-                {...panResponder.panHandlers}
-            >
+            duration: 200,
+            useNativeDriver: false
+          }).start();
+        } else if (gesture.dx > 1) {
+          Animated.timing(pan, {
+            toValue: {
+              x: 70,
+              y: 0
+            },
+            duration: 200,
+            useNativeDriver: false
+          }).start();
+        }
+      }
+      setTimeout(() => {
+        Animated.timing(pan, {
+          toValue: {
+            x: 0,
+            y: 0
+          },
+          duration: 200,
+          useNativeDriver: false
+        }).start();
+      }, 1000);
+    }
+  })).current;
+  return <Vieww style={{
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 2,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 5,
+    elevation: 5
+  }}>
+            <CardView style={{
+      transform: [{
+        translateX: pan.x
+      }, {
+        translateY: 0
+      }]
+    }} {...panResponder.panHandlers}>
                 {props.children}
             </CardView>
             <BackgroundView>
-                <DeleteView style={{ backgroundColor: '#FF8484' }}>
-                    <Trash
-                        width={50}
-                        height={50}
-                        onPress={() => {
-                            props.onDelete();
-                        }}
-                    />
+                <DeleteView style={{
+        backgroundColor: '#FF8484'
+      }}>
+                    <Trash width={50} height={50} onPress={() => {
+          props.onDelete();
+        }} />
                 </DeleteView>
-                <UpdateView style={{ backgroundColor: '#FFB660' }}>
-                    <Edit
-                        onPress={() => {
-                            props.onEdit();
-                        }}
-                    />
+                <UpdateView style={{
+        backgroundColor: '#FFB660'
+      }}>
+                    <Edit onPress={() => {
+          props.onEdit();
+        }} />
                 </UpdateView>
             </BackgroundView>
-        </Vieww>
-    );
-}
+        </Vieww>;
+});
